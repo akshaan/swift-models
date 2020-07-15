@@ -15,18 +15,17 @@
 import TensorFlow
 
 protocol Queue {
-    associatedtype Element = TensorGroup
     var componentTypes: [TensorDataType] { get }
     var shapes: [TensorShape?] { get }
     var names: [String]? { get }
     var queueRef: ResourceHandle { get }
     
-    func enqueue(vals: Element, name: String?)
-    func enqueueMany(vals: Element, name: String?)
-    func dequeue(name: String?) -> Element
-    func dequeueMany(n: Int, name: String?) -> Element
-    func dequeueUpTo(n: Int, name: String?) -> Element
+    func enqueue<T: TensorArrayProtocol>(vals: T, name: String?)
+    func enqueueMany<T: TensorArrayProtocol>(vals: T, name: String?)
+    func dequeue<T: TensorGroup>(name: String?) -> T
+    func dequeueMany<T: TensorGroup>(n: Tensor<Int32>, name: String?) -> T
+    func dequeueUpTo<T: TensorGroup>(n: Tensor<Int32>, name: String?) -> T
     func close(cancelPendingEnqueues: Bool, name: String?)
-    func isClosed(name: String?) -> Bool
-    func size(name: String?) -> Int
+    func isClosed(name: String?) -> Tensor<Bool>
+    func size(name: String?) -> Tensor<Int32>
 }
