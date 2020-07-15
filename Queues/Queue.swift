@@ -63,3 +63,27 @@ extension Queue {
         _Raw.queueSizeV2(handle: self.queueRef)
     }
 }
+
+class PaddingFIFOQueue: Queue {
+    let componentTypes: [TensorDataType]
+    let shapes: [TensorShape?]
+    let names: [String]?
+    let queueRef: ResourceHandle
+    let capacity: Int
+    let sharedName: String
+    
+    init(
+        capacity: Int,
+        dtypes: [TensorDataType],
+        shapes:  [TensorShape?],
+        names: [String]? = nil,
+        sharedName: String? = nil) {
+        self.capacity = capacity
+        self.componentTypes = dtypes
+        self.shapes = shapes
+        self.names = names
+        let sharedNameOrDefault = sharedName ?? UUID().uuidString
+        self.sharedName = sharedNameOrDefault
+        self.queueRef = _Raw.paddingFIFOQueueV2(componentTypes: dtypes, shapes: shapes, container: "default", sharedName: sharedNameOrDefault)
+    }
+}
