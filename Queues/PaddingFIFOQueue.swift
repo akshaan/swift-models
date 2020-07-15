@@ -37,36 +37,4 @@ class PaddingFIFOQueue: Queue {
         self.sharedName = sharedNameOrDefault
         self.queueRef = _Raw.paddingFIFOQueueV2(componentTypes: dtypes, shapes: shapes, container: "default", sharedName: sharedNameOrDefault)
     }
-    
-    public func enqueue<T>(vals: T, name: String? = nil) where T: TensorArrayProtocol {
-        _Raw.queueEnqueueV2(handle: self.queueRef, components: vals)
-    }
-    
-    public func enqueueMany<T>(vals: T, name: String?) where T : TensorArrayProtocol {
-        _Raw.queueEnqueueManyV2(handle: self.queueRef, components: vals)
-    }
-    
-    public func dequeue<T>(name: String?) -> T where T : TensorGroup {
-        _Raw.queueDequeueV2(handle: self.queueRef)
-    }
-    
-    public func dequeueMany<T>(n: Tensor<Int32>, name: String?) -> T where T : TensorGroup {
-        _Raw.queueDequeueManyV2(handle: self.queueRef, n: n)
-    }
-    
-    public func dequeueUpTo<T>(n: Tensor<Int32>, name: String?) -> T where T : TensorGroup {
-        _Raw.queueDequeueUpToV2(handle: self.queueRef, n: n)
-    }
-    
-    public func close(cancelPendingEnqueues: Bool, name: String?){
-        _Raw.queueCloseV2(handle: self.queueRef, cancelPendingEnqueues: cancelPendingEnqueues)
-    }
-    
-    public func isClosed(name: String?) -> Tensor<Bool> {
-        _Raw.queueIsClosedV2(handle: self.queueRef)
-    }
-    
-    public func size(name: String?) -> Tensor<Int32> {
-        _Raw.queueSizeV2(handle: self.queueRef)
-    }
 }
